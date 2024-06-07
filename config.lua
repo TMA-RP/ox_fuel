@@ -6,7 +6,7 @@ return {
 	versionCheck = true,
 
 	-- Enable support for ox_target
-	ox_target = false,
+	ox_target = true,
 
 	/*
 	* Show or hide gas stations blips
@@ -14,18 +14,18 @@ return {
 	* 1 - Show nearest (5000ms interval check)
 	* 2 - Show all
 	*/
-	showBlips = 2,
+	showBlips = 0,
 
 	-- Total duration (ex. 10% missing fuel): 10 / 0.25 * 250 = 10 seconds
 
 	-- Fuel refill value (every 250msec add 0.25%)
-	refillValue = 0.50,
+	refillValue = 0.625,
 
 	-- Fuel tick time (every 250 msec)
 	refillTick = 250,
 
 	-- Fuel cost (Added once every tick)
-	priceTick = 5,
+	priceTick = 0.625,
 
 	-- Can durability loss per refillTick
 	durabilityTick = 1.3,
@@ -33,13 +33,13 @@ return {
 	-- Enables fuel can
 	petrolCan = {
 		enabled = true,
-		duration = 5000,
-		price = 1000,
-		refillPrice = 800,
+		duration = 12000,
+		price = 50,
+		refillPrice = 30,
 	},
 
 	---Modifies the fuel consumption rate of all vehicles - see [`SET_FUEL_CONSUMPTION_RATE_MULTIPLIER`](https://docs.fivem.net/natives/?_0x845F3E5C).
-	globalFuelConsumptionRate = 10.0,
+	globalFuelConsumptionRate = 2.5,
 
 	-- Gas pump models
 	pumpModels = {

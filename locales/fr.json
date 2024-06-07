@@ -10,10 +10,10 @@
 	"start_fueling": "Faire le plein",
 	"petrolcan_buy_or_refill": "Acheter ou remplir un jerrican",
 	"fuel_station_blip": "Station essence",
-	"not_enough_money": "Il vous manque $%s",
-	"fuel_success": "Rempli à %s - $%s",
-	"petrolcan_refill": "Vous avez payé $%s pour remplir votre jerrican",
-	"petrolcan_buy": "Vous avez payé $%s pour un jerrican",
+	"not_enough_money": "Il vous manque %s$",
+	"fuel_success": "Rempli à %s%% - %s$",
+	"petrolcan_refill": "Vous avez payé %s$ pour remplir votre jerrican",
+	"petrolcan_buy": "Vous avez payé %s$ pour un jerrican",
 	"petrolcan_cannot_carry": "Vous ne pouvez pas porter ce jerrican",
 	"petrolcan_not_enough_fuel": "Vous n'avez plus assez d'essence dans ce jerrican"
 }

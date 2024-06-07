@@ -43,7 +43,7 @@ end)
 
 RegisterNetEvent('ox_fuel:pay', function(price, fuel, netid)
 	assert(type(price) == 'number', ('Price expected a number, received %s'):format(type(price)))
-
+	price = math.floor(price)
 	if not payMoney(source, price) then return end
 
 	fuel = math.floor(fuel)
@@ -103,4 +103,15 @@ RegisterNetEvent('ox_fuel:updateFuelCan', function(durability, netid, fuel)
 	end
 
 	-- player is sus?
+end)
+
+exports.ox_fuel:setPaymentMethod(function(playerId, amount)
+	local bankAmount = exports.ceeb_globals:getAccountMoney(playerId, "bank")
+
+	if bankAmount >= amount then
+		exports.ceeb_globals:removeAccountMoney(playerId, "bank", amount, "Station essence")
+		return true
+	end
+
+	lib.notify(playerId, { type = 'error', description = locale('not_enough_money', amount - bankAmount) })
 end)

@@ -24,7 +24,7 @@ local function startDrivingVehicle()
 	local vehState = Entity(vehicle).state
 
 	if not vehState.fuel then
-		vehState:set('fuel', GetVehicleFuelLevel(vehicle), true)
+		vehState:set('fuel', math.random(65, 100), true)
 		while not vehState.fuel do Wait(0) end
 	end
 
@@ -124,5 +124,10 @@ RegisterCommand('startfueling', function()
 	end
 end)
 
-RegisterKeyMapping('startfueling', 'Fuel vehicle', 'keyboard', 'e')
+exports.TMA:RegisterKeyMapping('startfueling', "Véhicule - Faire le plein", 'keyboard', 'e')
 TriggerEvent('chat:removeSuggestion', '/startfueling')
+
+exports.ox_fuel:setMoneyCheck(function()
+	local money = lib.callback.await("ceeb_globals:getAccountMoney", false, "bank")
+	return money
+end)
