@@ -36,6 +36,13 @@ if config.petrolCan.enabled then
 
 				return fuel.getPetrolCan(data.coords, petrolCan)
 			end,
+			canInteract = function(entity)
+				if state.isFueling or cache.vehicle or lib.progressActive() then
+					return false
+				end
+
+				return true
+			end,
 			icon = "fas fa-faucet",
 			label = locale('petrolcan_buy_or_refill'),
 		},
@@ -96,3 +103,9 @@ if config.petrolCan.enabled then
 		}
 	})
 end
+
+
+exports.ox_fuel:setMoneyCheck(function()
+	local money = lib.callback.await("ceeb_globals:getAccountMoney", false, "bank")
+	return money
+end)

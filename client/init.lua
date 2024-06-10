@@ -126,12 +126,3 @@ end)
 
 exports.TMA:RegisterKeyMapping('startfueling', "Véhicule - Faire le plein", 'keyboard', 'e')
 TriggerEvent('chat:removeSuggestion', '/startfueling')
-
-
-CreateThread(function()
-    Wait(1000)
-    exports.ox_fuel:setMoneyCheck(function()
-        local money = lib.callback.await("ceeb_globals:getAccountMoney", false, "bank")
-        return money
-    end)
-end)
