@@ -17,117 +17,121 @@ local fuel  = require 'client.fuel'
 require 'client.stations'
 
 local function startDrivingVehicle()
-	local vehicle = cache.vehicle
+    local vehicle = cache.vehicle
 
-	if not DoesVehicleUseFuel(vehicle) then return end
+    if not DoesVehicleUseFuel(vehicle) then return end
 
-	local vehState = Entity(vehicle).state
+    local vehState = Entity(vehicle).state
 
-	if not vehState.fuel then
-		vehState:set('fuel', math.random(65, 100), true)
-		while not vehState.fuel do Wait(0) end
-	end
+    if not vehState.fuel then
+        vehState:set('fuel', math.random(65, 100), true)
+        while not vehState.fuel do Wait(0) end
+    end
 
-	SetVehicleFuelLevel(vehicle, vehState.fuel)
+    SetVehicleFuelLevel(vehicle, vehState.fuel)
 
-	local fuelTick = 0
+    local fuelTick = 0
 
-	while cache.seat == -1 do
-		if not DoesEntityExist(vehicle) then return end
+    while cache.seat == -1 do
+        if not DoesEntityExist(vehicle) then return end
 
-		local fuelAmount = tonumber(vehState.fuel)
-		local newFuel = GetVehicleFuelLevel(vehicle)
+        local fuelAmount = tonumber(vehState.fuel)
+        local newFuel = GetVehicleFuelLevel(vehicle)
 
-		if fuelAmount > 0 then
-			if GetVehiclePetrolTankHealth(vehicle) < 700 then
-				newFuel -= math.random(10, 20) * 0.01
-			end
+        if fuelAmount > 0 then
+            if GetVehiclePetrolTankHealth(vehicle) < 700 then
+                newFuel -= math.random(10, 20) * 0.01
+            end
 
-			if fuelAmount ~= newFuel then
-				if fuelTick == 15 then
-					fuelTick = 0
-				end
+            if fuelAmount ~= newFuel then
+                if fuelTick == 15 then
+                    fuelTick = 0
+                end
 
-				fuel.setFuel(vehState, vehicle, newFuel, fuelTick == 0)
-				fuelTick += 1
-			end
-		end
+                fuel.setFuel(vehState, vehicle, newFuel, fuelTick == 0)
+                fuelTick += 1
+            end
+        end
 
-		Wait(1000)
-	end
+        Wait(1000)
+    end
 
-	fuel.setFuel(vehState, vehicle, vehState.fuel, true)
+    fuel.setFuel(vehState, vehicle, vehState.fuel, true)
 end
 
 if cache.seat == -1 then CreateThread(startDrivingVehicle) end
 
 lib.onCache('seat', function(seat)
-	if cache.vehicle then
-		state.lastVehicle = cache.vehicle
-	end
+    if cache.vehicle then
+        state.lastVehicle = cache.vehicle
+    end
 
-	if seat == -1 then
-		SetTimeout(0, startDrivingVehicle)
-	end
+    if seat == -1 then
+        SetTimeout(0, startDrivingVehicle)
+    end
 end)
 
 if config.ox_target then return require 'client.target' end
 
 RegisterCommand('startfueling', function()
-	if state.isFueling or cache.vehicle or lib.progressActive() then return end
+    if state.isFueling or cache.vehicle or lib.progressActive() then return end
 
-	local petrolCan = config.petrolCan.enabled and GetSelectedPedWeapon(cache.ped) == `WEAPON_PETROLCAN`
-	local playerCoords = GetEntityCoords(cache.ped)
-	local nearestPump = state.nearestPump
+    local petrolCan = config.petrolCan.enabled and GetSelectedPedWeapon(cache.ped) == `WEAPON_PETROLCAN`
+    local playerCoords = GetEntityCoords(cache.ped)
+    local nearestPump = state.nearestPump
 
-	if nearestPump then
-		local moneyAmount = utils.getMoney()
+    if nearestPump then
+        local moneyAmount = utils.getMoney()
 
-		if petrolCan and moneyAmount >= config.petrolCan.refillPrice then
-			return fuel.getPetrolCan(nearestPump, true)
-		end
+        if petrolCan and moneyAmount >= config.petrolCan.refillPrice then
+            return fuel.getPetrolCan(nearestPump, true)
+        end
 
-		local vehicleInRange = state.lastVehicle and #(GetEntityCoords(state.lastVehicle) - playerCoords) <= 3
+        local vehicleInRange = state.lastVehicle and #(GetEntityCoords(state.lastVehicle) - playerCoords) <= 3
 
-		if not vehicleInRange then
-			if not config.petrolCan.enabled then return end
+        if not vehicleInRange then
+            if not config.petrolCan.enabled then return end
 
-			if moneyAmount >= config.petrolCan.price then
-				return fuel.getPetrolCan(nearestPump)
-			end
+            if moneyAmount >= config.petrolCan.price then
+                return fuel.getPetrolCan(nearestPump)
+            end
 
-			return lib.notify({ type = 'error', description = locale('petrolcan_cannot_afford') })
-		elseif moneyAmount >= config.priceTick then
-			return fuel.startFueling(state.lastVehicle, true)
-		else
-			return lib.notify({ type = 'error', description = locale('refuel_cannot_afford') })
-		end
+            return lib.notify({ type = 'error', description = locale('petrolcan_cannot_afford') })
+        elseif moneyAmount >= config.priceTick then
+            return fuel.startFueling(state.lastVehicle, true)
+        else
+            return lib.notify({ type = 'error', description = locale('refuel_cannot_afford') })
+        end
 
-		return lib.notify({ type = 'error', description = locale('vehicle_far') })
-	elseif petrolCan then
-		local vehicle = utils.getVehicleInFront()
+        return lib.notify({ type = 'error', description = locale('vehicle_far') })
+    elseif petrolCan then
+        local vehicle = utils.getVehicleInFront()
 
-		if vehicle then
-			local hasFuel = config.classUsage[GetVehicleClass(vehicle)] or true
+        if vehicle then
+            local hasFuel = config.classUsage[GetVehicleClass(vehicle)] or true
 
-			if hasFuel == 0.0 then return end
+            if hasFuel == 0.0 then return end
 
-			local boneIndex = utils.getVehiclePetrolCapBoneIndex(vehicle)
-			local fuelcapPosition = boneIndex and GetWorldPositionOfEntityBone(vehicle, boneIndex)
+            local boneIndex = utils.getVehiclePetrolCapBoneIndex(vehicle)
+            local fuelcapPosition = boneIndex and GetWorldPositionOfEntityBone(vehicle, boneIndex)
 
-			if fuelcapPosition and #(playerCoords - fuelcapPosition) < 1.8 then
-				return fuel.startFueling(vehicle, false)
-			end
+            if fuelcapPosition and #(playerCoords - fuelcapPosition) < 1.8 then
+                return fuel.startFueling(vehicle, false)
+            end
 
-			return lib.notify({ type = 'error', description = locale('vehicle_far') })
-		end
-	end
+            return lib.notify({ type = 'error', description = locale('vehicle_far') })
+        end
+    end
 end)
 
 exports.TMA:RegisterKeyMapping('startfueling', "Véhicule - Faire le plein", 'keyboard', 'e')
 TriggerEvent('chat:removeSuggestion', '/startfueling')
 
-exports.ox_fuel:setMoneyCheck(function()
-	local money = lib.callback.await("ceeb_globals:getAccountMoney", false, "bank")
-	return money
+
+CreateThread(function()
+    Wait(1000)
+    exports.ox_fuel:setMoneyCheck(function()
+        local money = lib.callback.await("ceeb_globals:getAccountMoney", false, "bank")
+        return money
+    end)
 end)
