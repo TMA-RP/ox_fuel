@@ -50,5 +50,6 @@ return {
         `prop_gas_pump_1c`,
         `prop_gas_pump_1b`,
         `prop_gas_pump_1d`,
+		`denis3d_prop_gas_pump`
     }
 }
