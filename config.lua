@@ -28,7 +28,7 @@ return {
 	priceTick = 0.625 * 4,
 
 	-- Can durability loss per refillTick
-	durabilityTick = 0.0,
+	durabilityTick = 0.625 * 4,
 
 	-- Enables fuel can
 	petrolCan = {
