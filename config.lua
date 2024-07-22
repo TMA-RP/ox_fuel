@@ -39,7 +39,7 @@ return {
 	},
 
 	---Modifies the fuel consumption rate of all vehicles - see [`SET_FUEL_CONSUMPTION_RATE_MULTIPLIER`](https://docs.fivem.net/natives/?_0x845F3E5C).
-	globalFuelConsumptionRate = 4.5,
+	globalFuelConsumptionRate = 2.5,
 
 	-- Gas pump models
 	pumpModels = {
