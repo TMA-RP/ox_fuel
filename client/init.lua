@@ -29,7 +29,7 @@ local function startDrivingVehicle()
 	end
 
 	SetVehicleFuelLevel(vehicle, vehState.fuel)
-
+	local fuelTick = 0
 	while cache.seat == -1 do
 		if not DoesEntityExist(vehicle) then return end
 
@@ -42,7 +42,12 @@ local function startDrivingVehicle()
 			end
 
 			if fuelAmount ~= newFuel then
-				fuel.setFuel(vehState, vehicle, newFuel, true)
+				if fuelTick == 15 then
+					fuelTick = 0
+				end
+
+				fuel.setFuel(vehState, vehicle, newFuel, fuelTick == 0)
+				fuelTick += 1
 			end
 		end
 
