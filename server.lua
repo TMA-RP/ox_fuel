@@ -17,6 +17,7 @@ local function setFuelState(netId, fuel)
 	fuel = math.clamp(fuel, 0, 100)
 
 	state:set('fuel', fuel, true)
+	TriggerClientEvent('ox_fuel:setFuel', NetworkGetEntityOwner(vehicle), netId, fuel)
 end
 
 ---@param playerId number
